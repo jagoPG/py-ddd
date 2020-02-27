@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from app.infrastructure.dependency_injector import DependencyInjector, ServiceDoesNotExist, \
+from app.infrastructure.service_injector import ServiceInjector, ServiceDoesNotExist, \
     ServiceAlreadyExists
 
 
@@ -10,9 +10,9 @@ class MockService:
     """
 
 
-class DependencyInjectorTest(TestCase):
+class ServiceInjectorTest(TestCase):
     def setUp(self):
-        self.test_injector = DependencyInjector('test', '1.0')
+        self.test_injector = ServiceInjector('test', '1.0')
 
     def test_service_can_be_created(self):
         mock_service = MockService()

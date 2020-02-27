@@ -1,16 +1,16 @@
-class DependencyInjector:
+class ServiceInjector:
     """
     Provides access to registered services
     """
 
     def __init__(self, name, version):
         """
-        :param name: Name of the dependency injector
-        :param version: Version of the dependency injector
+        :param name: Name of the service injector
+        :param version: Version of the service injector
         """
         self.name = name
         self.version = version
-        self.service_consumer = DependencyConsumer()
+        self.service_consumer = ServiceConsumer()
 
     def is_service(self, identifier) -> bool:
         """
@@ -32,9 +32,9 @@ class DependencyInjector:
         return self.service_consumer.services[identifier]
 
 
-class DependencyConsumer:
+class ServiceConsumer:
     """
-    Stores the services of the dependency injector
+    Stores the services of the service injector
     """
 
     def __init__(self):
@@ -42,7 +42,7 @@ class DependencyConsumer:
 
     def register_service(self, identifier, service):
         """
-        Registers a service in the DependencyInjector
+        Registers a service in the ServiceInjector
 
         :param identifier: An unique identifier for the service
         :param service: An instance of the service
