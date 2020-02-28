@@ -1,0 +1,10 @@
+services:
+  test.service_injector.another_fixture_service:
+    class: test.infrastructure.test_service_injector.AnotherFixtureService
+
+  test.service_injector.fixture_service:
+    class: test.infrastructure.test_service_injector.FixtureService
+    arguments:
+      - test.service_injector.another_fixture_service
+    tag:
+      name: testing
