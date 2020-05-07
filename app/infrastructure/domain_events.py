@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 
 
 class DomainEventPublisher:
@@ -37,10 +38,15 @@ class DomainEventPublisher:
         if not isinstance(domain_event_subscriber, DomainEventSubscriber):
             raise NotADomainEventSubscriber
         self.subscribers[identifier] = domain_event_subscriber
+        logging.debug(
+            'Service {0} has subscribed to {1}',
+            domain_event_subscriber.__class__,
+            identifier
+        )
 
     def unsubscribe(self, identifier) -> None:
         """
-        Unsubscribes a DomainEventSubscriber from the Domain Event
+        Unsubscribed a DomainEventSubscriber from the Domain Event
 
         :param identifier: The identifier of the subscriber
         :raises SubscriberDoesNotExist:
@@ -48,6 +54,7 @@ class DomainEventPublisher:
         if identifier not in self.subscribers:
             raise SubscriberDoesNotExist
         del self.subscribers[identifier]
+        logging.debug('Service {0} has unsubscribed', identifier)
 
     def publish(self, domain_event) -> None:
         """
@@ -58,6 +65,11 @@ class DomainEventPublisher:
         for item in self.subscribers.values():
             if item.is_subscribed_to(domain_event):
                 item.handle(domain_event)
+                logging.debug(
+                    'Notify to service {0} about {1} published',
+                    item.__class__,
+                    domain_event.__class__
+                )
 
 
 class DomainRoot:
@@ -69,13 +81,14 @@ class DomainRoot:
         self.events = []
         self.domain_event_publisher = DomainEventPublisher.get_instance()
 
-    def append(self, domain_event) -> None:
+    def publish(self, domain_event) -> None:
         """
         Store an event to be launched later
 
         :param domain_event:
         """
         self.events.append(domain_event)
+        logging.debug('Event {0} registered', domain_event.__class__)
 
     def release(self) -> None:
         """
@@ -83,6 +96,7 @@ class DomainRoot:
         """
         for event in self.events:
             self.domain_event_publisher.publish(event)
+        logging.debug('All {0} registered events have been published', len(self.events))
         self.clear()
 
     def clear(self) -> None:
@@ -90,6 +104,7 @@ class DomainRoot:
         Remove all recorded events
         """
         self.events.clear()
+        logging.debug('Stored events have been cleared')
 
 
 class DomainEvent:
