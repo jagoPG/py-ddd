@@ -1,4 +1,4 @@
-from domain.model.Event import Event
+from domain.model.Event import Event, EventName, EventId
 
 
 class PersistEventCommand:
@@ -13,8 +13,8 @@ class PersistEvent:
 
     def handle(self, command):
         event = Event(
-            command.identifier,
-            command.name
+            EventId(command.identifier),
+            EventName(command.name)
         )
         event.event_created()
         self.repository.persist(event)

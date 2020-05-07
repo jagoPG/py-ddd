@@ -28,7 +28,7 @@ class EventName:
 
     @staticmethod
     def __validate_name(name):
-        if len(name) < 10 or len(name) > 40:
+        if len(name) < 10 or len(name) > 60:
             raise EventNameInvalid
 
 
