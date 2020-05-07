@@ -83,27 +83,32 @@ class ServiceRecorder:
         if not self.parser.can_be_parsed():
             raise FileCannotBeParsed
         for service in self.parser.parse_line():
-            instance = ServiceRecorder.__create_service(service)
+            instance = self.__create_service(service)
             self.service_injector.service_consumer.register_service(
                 service.identifier,
                 instance
             )
 
-    @staticmethod
-    def __create_service(service_definition) -> object:
+    def __create_service(self, service_definition) -> object:
         class_name, module = ServiceRecorder.__separate_class_and_module(
             service_definition.class_path
         )
         new_instance = ServiceRecorder.__generate_instance(
             module,
             class_name,
-            service_definition.dependencies
+            self.__to_instance(service_definition.dependencies) # get dependency instances
         )
         return Service(
             service_definition.identifier,
             new_instance,
             service_definition.tag
         )
+
+    def __to_instance(self, dependencies = []):
+        return [
+            self.service_injector.get_service(dependency).instance for dependency in dependencies
+        ]
+
 
     @staticmethod
     def __separate_class_and_module(full_path) -> tuple:
