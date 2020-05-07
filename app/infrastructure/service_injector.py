@@ -101,14 +101,13 @@ class ServiceRecorder:
         return Service(
             service_definition.identifier,
             new_instance,
-            service_definition.tag
+            service_definition.tags
         )
 
     def __to_instance(self, dependencies = []):
         return [
             self.service_injector.get_service(dependency).instance for dependency in dependencies
         ]
-
 
     @staticmethod
     def __separate_class_and_module(full_path) -> tuple:
@@ -203,9 +202,9 @@ class YamlServiceFileParser(ServiceFileParser):
             for dependency in definition['arguments']:
                 service_definition.add_dependency(dependency)
 
-        if 'tag' in definition:
-            for key, value in definition['tag'].items():
-                service_definition.add_tag(key, value)
+        if 'tags' in definition:
+            for tag_definition in definition['tags']:
+                service_definition.add_tag(tag_definition)
         return service_definition
 
 
@@ -222,7 +221,7 @@ class ServiceDefinition:
         self.identifier = identifier
         self.class_path = class_path
         self.dependencies = []
-        self.tag = {}
+        self.tags = []
 
     def add_dependency(self, identifier) -> None:
         """
@@ -234,14 +233,13 @@ class ServiceDefinition:
             raise DependencyAlreadyExists
         self.dependencies.append(identifier)
 
-    def add_tag(self, key, value) -> None:
+    def add_tag(self, tag_definition) -> None:
         """
         Adds a tag to a ServiceDefinition to be managed by an external service
 
-        :param key: Key of the property
-        :param value: Value of the property
+        :param tag_definition: Key/value of the tag
         """
-        self.tag[key] = value
+        self.tags.append(tag_definition)
 
 
 class ServiceAlreadyExists(Exception):
