@@ -39,9 +39,10 @@ class DomainEventPublisher:
             raise NotADomainEventSubscriber
         self.subscribers[identifier] = domain_event_subscriber
         logging.debug(
-            'Service {0} has subscribed to {1}',
-            domain_event_subscriber.__class__,
-            identifier
+            'Service {0} has subscribed to {1}'.format(
+                type(domain_event_subscriber).__name__,
+                identifier
+            )
         )
 
     def unsubscribe(self, identifier) -> None:
@@ -66,9 +67,10 @@ class DomainEventPublisher:
             if item.is_subscribed_to(domain_event):
                 item.handle(domain_event)
                 logging.debug(
-                    'Notify to service {0} about {1} published',
-                    item.__class__,
-                    domain_event.__class__
+                    'Notify to service {0} about {1} published'.format(
+                        type(item).__name__,
+                        type(domain_event).__name__
+                    )
                 )
 
 
@@ -88,7 +90,7 @@ class DomainRoot:
         :param domain_event:
         """
         self.events.append(domain_event)
-        logging.debug('Event {0} registered', domain_event.__class__)
+        logging.debug('Event {0} registered'.format(type(domain_event).__name__))
 
     def release(self) -> None:
         """
@@ -96,7 +98,7 @@ class DomainRoot:
         """
         for event in self.events:
             self.domain_event_publisher.publish(event)
-        logging.debug('All {0} registered events have been published', len(self.events))
+        logging.debug('{0} registered events have been published'.format(len(self.events)))
         self.clear()
 
     def clear(self) -> None:

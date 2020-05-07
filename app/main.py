@@ -1,5 +1,6 @@
 from application.persist_event import PersistEventCommand
 from infrastructure.boot import Boot
+import logging
 
 if __name__ == '__main__':
     app = Boot()
@@ -10,3 +11,7 @@ if __name__ == '__main__':
     handler.instance.handle(
         PersistEventCommand('123', 'My Sweet Torment - TLBH route in O2 Arena')
     )
+    repository = app.injector.get_service(
+        'app.persistence.sql.event_repository'
+    )
+    logging.info(repository.instance.of_id('123'))
