@@ -12,6 +12,12 @@ There is a `bin/bash` directory at the root folder with all tasks defined:
 ./bin/bash/init.sh
 ```
 
+# RUN APP
+```
+./bin/bash/run.sh && open http://127.0.0.1:5000
+```
+
+
 # TEST EXECUTION
 ```
 ./bin/bash/test.sh
