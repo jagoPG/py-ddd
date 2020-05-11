@@ -1,6 +1,6 @@
 import logging
-from domain.model.Event import EventCreated
-from infrastructure.domain_events import DomainEventSubscriber
+from app.domain.model.Event import EventCreated
+from app.infrastructure.domain_events import DomainEventSubscriber
 
 
 class EventWasPublishedSubscriber(DomainEventSubscriber):

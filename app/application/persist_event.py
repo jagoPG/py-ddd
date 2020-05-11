@@ -1,4 +1,4 @@
-from domain.model.Event import Event, EventName, EventId
+from app.domain.model.Event import Event, EventName, EventId
 
 
 class PersistEventCommand:

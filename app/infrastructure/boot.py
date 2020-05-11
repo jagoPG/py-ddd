@@ -1,5 +1,6 @@
-from infrastructure.domain_events import DomainEventPublisher
-from infrastructure.service_injector import ServiceInjector, ServiceRecorder, YamlServiceFileParser
+from app.infrastructure.domain_events import DomainEventPublisher
+from app.infrastructure.service_injector import ServiceInjector, ServiceRecorder, \
+    YamlServiceFileParser
 import logging
 import sys
 

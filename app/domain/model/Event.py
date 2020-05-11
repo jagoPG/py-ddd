@@ -1,5 +1,5 @@
 from uuid import uuid4
-from infrastructure.domain_events import DomainRoot, DomainEvent
+from app.infrastructure.domain_events import DomainRoot, DomainEvent
 
 
 class Event(DomainRoot):
