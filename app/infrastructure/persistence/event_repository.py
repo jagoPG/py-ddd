@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
-from domain.model.Event import Event, EventId, EventName
+from app.domain.model.Event import Event, EventId, EventName
 
 
 class EventRepository:
@@ -11,6 +11,9 @@ class EventRepository:
         raise NotImplementedError
 
     def of_id(self, identifier) -> object:
+        raise NotImplementedError
+
+    def all(self) -> list:
         raise NotImplementedError
 
 
@@ -48,6 +51,10 @@ class MongoEventRepository(EventRepository):
             )
         else:
             return None
+
+    def all(self) -> list:
+        events = self.collection.find({})
+        return [self.__to_instance(event) for event in events]
 
     def __exist_document(self, identifier):
         return self.of_id(identifier) is not None

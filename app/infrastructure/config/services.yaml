@@ -1,15 +1,20 @@
 services:
   app.persistence.sql.event_repository:
-    class: infrastructure.persistence.event_repository.MongoEventRepository
+    class: app.infrastructure.persistence.event_repository.MongoEventRepository
     arguments: []
 
   app.application.command.persist_event:
-    class: application.persist_event.PersistEvent
+    class: app.application.persist_event.PersistEvent
+    arguments:
+      - 'app.persistence.sql.event_repository'
+
+  app.application.query.get_events:
+    class: app.application.get_events.GetEvents
     arguments:
       - 'app.persistence.sql.event_repository'
 
   app.application.event.event_created:
-    class: domain.events.EventSubscriber.EventWasPublishedSubscriber
+    class: app.domain.events.EventSubscriber.EventWasPublishedSubscriber
     arguments: []
     tags:
       - name: 'domain_event_sub'
