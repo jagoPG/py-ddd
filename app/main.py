@@ -1,12 +1,14 @@
+import logging
 
 from app.application.get_events import GetEventsQuery
+from app.application.get_inventory import GetInventoryOfEventQuery
 from app.application.persist_event import PersistEventCommand
 from app.application.persist_inventory import PersistInventoryCommand
+from app.domain.model.Event import EventNameInvalid
 from app.infrastructure.boot import Boot
 from flask import Flask, jsonify, request, render_template
 from uuid import uuid4
 
-import logging
 
 boot = Boot()
 boot.start()
@@ -18,6 +20,14 @@ app = Flask(__name__, template_folder='infrastructure/flask/templates')
 def index():
     handler = injector.get_service('app.application.query.get_events').instance
     return render_template('index.html', events=handler.handle(GetEventsQuery()))
+
+
+@app.route('/<event_id>')
+def inventory_of_event(event_id):
+    handler = injector.get_service('app.application.inventory.query_inventory_of_event').instance
+    return render_template(
+        'inventory_of_id.html', inventory=handler.handle(GetInventoryOfEventQuery(event_id))
+    )
 
 
 @app.route('/event')
@@ -45,12 +55,15 @@ def post_event():
     handler = injector.get_service(
         'app.application.command.persist_event'
     ).instance
-    handler.handle(
-        PersistEventCommand(
-            uuid4(),
-            request.form['name']
+    try:
+        handler.handle(
+            PersistEventCommand(
+                uuid4(),
+                request.form['name']
+            )
         )
-    )
+    except EventNameInvalid:
+        return jsonify({'response': 'failed', 'reason': 'invalid name length'})
     return jsonify({'response': 'done'})
 
 

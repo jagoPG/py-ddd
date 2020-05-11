@@ -15,6 +15,7 @@
     <tr>
         <th><strong>ID</strong></th>
         <th><strong>Name</strong></th>
+        <th><strong>Actions</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -22,6 +23,7 @@
     <tr>
         <td>{{ event.id }}</td>
         <td>{{ event.name }}</td>
+        <td><a href="/{{ event.id }}">See Inventory</a></td>
     </tr>
     {% endfor %}
     </tbody>

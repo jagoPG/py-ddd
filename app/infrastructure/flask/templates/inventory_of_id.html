@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf8">
+    <meta lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDD with Python and Flask</title>
+</head>
+
+<body>
+<h1>DDD with Python</h1>
+<h2>Inventory</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th><strong>Seller Name</strong></th>
+        <th><strong>Amount</strong></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in inventory %}
+    <tr>
+        <td>{{ item.seller_name }}</td>
+        <td>{{ item.amount }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>
