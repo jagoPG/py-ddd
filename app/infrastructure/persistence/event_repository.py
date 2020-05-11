@@ -1,5 +1,3 @@
-from pymongo import MongoClient
-
 from app.domain.model.Event import Event, EventId, EventName
 
 
@@ -18,10 +16,9 @@ class EventRepository:
 
 
 class MongoEventRepository(EventRepository):
-    def __init__(self):
-        self.client = MongoClient('mongodb://root:root@127.0.0.1:27017')
-        self.collection = self.client.stubhub.events
-    
+    def __init__(self, mongo_client):
+        self.collection = mongo_client.collection('events')
+
     def persist(self, event) -> None:
         if self.__exist_document(event.identifier.identifier):
             self.collection.update_one(

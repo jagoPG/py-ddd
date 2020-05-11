@@ -1,14 +1,11 @@
-from pymongo import MongoClient
-
 from app.domain.model.Event import EventId
 from app.domain.model.Inventory import InventoryRepository, Inventory, InventoryId, SellerName, \
     InventoryAmount
 
 
 class MongoInventoryRepository(InventoryRepository):
-    def __init__(self):
-        self.client = MongoClient('mongodb://root:root@127.0.0.1:27017')
-        self.collection = self.client.stubhub.inventory
+    def __init__(self, mongo_client):
+        self.collection = mongo_client.collection('inventory')
 
     def persist(self, inventory) -> None:
         if self.exists_document(inventory.identifier):

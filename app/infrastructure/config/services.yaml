@@ -1,11 +1,17 @@
 services:
+  app.persistence.mongodb:
+    class: app.infrastructure.persistence.mongo.Mongo
+    arguments: []
+
   app.persistence.mongodb.event_repository:
     class: app.infrastructure.persistence.event_repository.MongoEventRepository
-    arguments: []
+    arguments:
+      - 'app.persistence.mongodb'
 
   app.persistence.mongodb.inventory_repository:
     class: app.infrastructure.persistence.inventory_repository.MongoInventoryRepository
-    arguments: []
+    arguments:
+      - 'app.persistence.mongodb'
 
   app.application.command.persist_event:
     class: app.application.persist_event.PersistEvent
