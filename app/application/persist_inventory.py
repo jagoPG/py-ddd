@@ -18,7 +18,7 @@ class PersistInventory:
         self.repository.persist(
             Inventory(
                 InventoryId(command.identifier),
-                EventId(command.identifier),
+                EventId(command.event_id),
                 InventoryAmount(command.amount),
                 SellerName(command.seller_name)
             )

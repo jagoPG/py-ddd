@@ -54,5 +54,5 @@ class InventoryRepository:
     def of_id(self, identifier) -> object:
         raise NotImplementedError
 
-    def of_event_id(self, event_id) -> object:
+    def of_event_id(self, event_id) -> list:
         raise NotImplementedError

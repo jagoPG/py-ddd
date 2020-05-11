@@ -16,8 +16,8 @@ class MongoInventoryRepository(InventoryRepository):
                 {'identifier': inventory.identifier.identifier},
                 {
                     "$set": {
-                        'identifier': inventory.identifier.identifier,
-                        'eventId': inventory.event_id.identifier,
+                        'identifier': str(inventory.identifier.identifier),
+                        'eventId': str(inventory.event_id.identifier),
                         'sellerName': inventory.seller_name.name,
                         'amount': inventory.amount.amount
                     }
@@ -25,8 +25,8 @@ class MongoInventoryRepository(InventoryRepository):
             )
         else:
             self.collection.insert_one({
-                'identifier': inventory.identifier.identifier,
-                'eventId': inventory.event_id.identifier,
+                'identifier': str(inventory.identifier.identifier),
+                'eventId': str(inventory.event_id.identifier),
                 'sellerName': inventory.seller_name.name,
                 'amount': inventory.amount.amount
 
@@ -45,14 +45,14 @@ class MongoInventoryRepository(InventoryRepository):
         else:
             return None
 
-    def of_event_id(self, event_id) -> object:
-        result = self.collection.find_one({'eventId': event_id.identifier})
+    def of_event_id(self, event_id) -> list:
+        result = self.collection.find({'eventId': str(event_id.identifier)})
         if result is not None:
-            return self.__to_instance(
-                result
-            )
+            return [self.__to_instance(
+                item
+            ) for item in result]
         else:
-            return None
+            return []
 
     def __to_instance(self, record):
         return Inventory(

@@ -28,14 +28,14 @@ class MongoEventRepository(EventRepository):
                 {'identifier': event.identifier.identifier},
                 {
                     "$set": {
-                        'identifier': event.identifier.identifier,
+                        'identifier': str(event.identifier.identifier),
                         'name': event.name.name
                     }
                 }
             )
         else:
             self.collection.insert_one({
-                'identifier': event.identifier.identifier,
+                'identifier': str(event.identifier.identifier),
                 'name': event.name.name
             })
         event.release()
