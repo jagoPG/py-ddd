@@ -17,6 +17,23 @@ There is a `bin/bash` directory at the root folder with all tasks defined:
 ./bin/bash/test.sh
 ```
 
+# APP FOLDER STRUCTURE
+## Application
+Commands, queries, data transformers... glue between business logic and application infrastructure.
+
+## Domain
+Business logic of the application.
+
+### Events
+Subscribers to domain root published events.
+
+### Model
+Domain abstraction, main business logic.
+
+## Infrastructure
+Controller layer framework, configuration, integration of internal services with third party
+libraries, application control, application utilities...
+
 # WORKFLOW
 To make new contributions open a new *Pull request* in the repository or an issue with the
 suggestion - a PR is preferred. Make sure that your code has implemented enough tests, is not
