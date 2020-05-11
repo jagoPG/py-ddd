@@ -1,10 +1,12 @@
-from app.application.persist_event import PersistEventCommand
+
 from app.application.get_events import GetEventsQuery
+from app.application.persist_event import PersistEventCommand
+from app.application.persist_inventory import PersistInventoryCommand
 from app.infrastructure.boot import Boot
 from flask import Flask, jsonify, request, render_template
 from uuid import uuid4
-import logging
 
+import logging
 
 boot = Boot()
 boot.start()
@@ -52,3 +54,30 @@ def post_event():
     return jsonify({'response': 'done'})
 
 
+@app.route('/inventory', methods=['POST'])
+def post_inventory():
+    logging.debug('POST new inventory')
+    if not __is_valid_inventory_request(request.form):
+        logging.debug('POST failed: field missing')
+        return jsonify({'response': 'failed', 'reason': 'field missing'})
+    handler = injector.get_service(
+        'app.application.inventory.persist_inventory'
+    ).instance
+    handler.handle(
+        PersistInventoryCommand(
+            uuid4(),
+            request.form['event_id'],
+            request.form['amount'],
+            request.form['seller_name']
+        )
+    )
+    return jsonify({'response': 'done'})
+
+
+def __is_valid_inventory_request(body):
+    logging.debug('Fields attached to the request: {0}'.format(body))
+    REQUIRED_FIELDS = ['event_id', 'amount', 'seller_name']
+    for field in REQUIRED_FIELDS:
+        if field not in body:
+            return False
+    return True
