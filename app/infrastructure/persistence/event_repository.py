@@ -35,10 +35,15 @@ class MongoEventRepository(EventRepository):
                 'identifier': str(event.identifier.identifier),
                 'name': event.name.name
             })
+
+        # This action should be launched from a database afterPersist hook if possible
         event.release()
 
     def delete(self, event) -> None:
         self.collection.delete_one({'identifier': event.identifier})
+
+        # This action should be launched from a database afterPersist hook if possible
+        event.release()
 
     def of_id(self, identifier) -> object:
         result = self.collection.find_one({'identifier': identifier})

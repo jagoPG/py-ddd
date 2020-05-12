@@ -28,10 +28,15 @@ class MongoInventoryRepository(InventoryRepository):
                 'amount': inventory.amount.amount
 
             })
+
+        # This action should be launched from a database afterPersist hook if possible
         inventory.release()
 
     def delete(self, inventory) -> None:
         self.collection.delete_one({'identifier': inventory.identifier})
+
+        # This action should be launched from a database afterPersist hook if possible
+        inventory.release()
 
     def of_id(self, identifier) -> object:
         result = self.collection.find_one({'identifier': identifier})
